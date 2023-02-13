@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
-import "react-tabs/style/react-tabs.css";
+import { Tabs, Tab } from "react-bootstrap";
+import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import PriceForm from "./components/Price";
 import AccessibilityForm from "./components/Accessibility";
@@ -43,42 +43,35 @@ function App() {
   return (
     <>
       <h1>Im' bored :(</h1>
-      <Tabs className="tab">
-        <TabList>
-          <Tab>Price</Tab>
-          <Tab>Accessibility</Tab>
-          <Tab>Activity type</Tab>
-          <Tab>Number of participants</Tab>
-        </TabList>
-
-        <TabPanel>
+      <Tabs defaultActiveKey="price" id="tab-activities" className="mb-3">
+        <Tab eventKey="price" title="Price">
           <PriceForm
             handlePriceChange={handlePriceChange}
             price={price}
             setData={setData}
           />
-        </TabPanel>
-        <TabPanel>
+        </Tab>
+        <Tab eventKey="accessibility" title="Accessibility">
           <AccessibilityForm
             handleAccessibilityChange={handleAccessibilityChange}
             accessibility={accessibility}
             setData={setData}
           />
-        </TabPanel>
-        <TabPanel>
+        </Tab>
+        <Tab eventKey="activity-type" title="Activity type">
           <TypeForm
             handleTypeChange={handleTypeChange}
             type={type}
             setData={setData}
           />
-        </TabPanel>
-        <TabPanel>
+        </Tab>
+        <Tab eventKey="number-of-participants" title="Number of participants">
           <ParticipantsForm
             handleParticipantsChange={handleParticipantsChange}
             participants={participants}
             setData={setData}
           />
-        </TabPanel>
+        </Tab>
       </Tabs>
       {data && <Main data={data} />}
     </>
