@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Form, Button } from "react-bootstrap";
 
 export default function ParticipantsForm({
   handleParticipantsChange,
@@ -24,7 +25,6 @@ export default function ParticipantsForm({
         }
         let actualData = await response.json();
         setData(actualData);
-        console.log(actualData);
         setError(null);
       } catch (error) {
         setError(error.message);
@@ -36,28 +36,26 @@ export default function ParticipantsForm({
     getData();
   };
 
-  console.log(participants);
-
   return (
     <>
       <h2>Get a suggestion based on number of participants:</h2>
 
-      <form onSubmit={handleSubmit}>
-        <label>Enter number of participants:</label>
-        <input
-          className="input"
-          name="participants"
-          type="number"
-          min={1}
-          max={5}
-          defaultValue={1}
+      <Form onSubmit={handleSubmit} className="mt-4 d-grid form-mb">
+        <Form.Label>Enter number of participants (max of 4 people)</Form.Label>
+        <Form.Control
           onChange={handleParticipantsChange}
           disabled={isLoading}
-        />
-        <button className="btn-submit" type="submit" disabled={isLoading}>
+          type="number"
+          max={4}
+          min={1}
+          required
+          className="mb-3"
+        ></Form.Control>
+
+        <Button variant="primary" size="lg" type="submit" disabled={isLoading}>
           Search
-        </button>
-      </form>
+        </Button>
+      </Form>
     </>
   );
 }

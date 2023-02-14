@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Form, Button } from "react-bootstrap";
 
 export default function AccessibilityForm({
   handleAccessibilityChange,
@@ -11,6 +12,7 @@ export default function AccessibilityForm({
   const handleSubmit = (event) => {
     event.preventDefault();
 
+    //a way of conveying this message to the user
     if (accessibility.minaccessibility <= accessibility.maxaccessibility) {
       setLoading(true);
       const getData = async () => {
@@ -25,7 +27,6 @@ export default function AccessibilityForm({
           }
           let actualData = await response.json();
           setData(actualData);
-          console.log(actualData);
           setError(null);
         } catch (error) {
           setError(error.message);
@@ -42,33 +43,38 @@ export default function AccessibilityForm({
     <>
       <h2>Get a suggestion based on activity's accessibility:</h2>
 
-      <form onSubmit={handleSubmit}>
-        <label>Accessibility (max to min values):</label>
-        <input
-          className="input"
-          name="minaccessibility"
-          type="range"
-          min={0}
-          max={1}
-          step={0.01}
-          defaultValue={0}
-          onChange={handleAccessibilityChange}
-          disabled={isLoading}
-        />
-        <input
-          className="input"
-          name="maxaccessibility"
-          type="range"
-          min={0}
-          max={1}
-          step={0.01}
-          onChange={handleAccessibilityChange}
-          disabled={isLoading}
-        />
-        <button className="btn-submit" type="submit" disabled={isLoading}>
+      <Form onSubmit={handleSubmit} className="mt-4 d-grid form-mb">
+        <Form.Group className="mb-3" controlId="formGroupMinAccessibility">
+          <Form.Label>Minimal value for accessibility</Form.Label>
+          <Form.Control
+            type="range"
+            name="minaccessibility"
+            min={0}
+            max={1}
+            step={0.01}
+            defaultValue={0}
+            onChange={handleAccessibilityChange}
+            disabled={isLoading}
+          />
+        </Form.Group>
+        <Form.Group className="mb-3" controlId="formGroupMaxAccessibility">
+          <Form.Label>Maximal value for accessibility</Form.Label>
+          <Form.Control
+            type="range"
+            name="maxaccessibility"
+            min={0}
+            max={1}
+            step={0.01}
+            defaultValue={1}
+            onChange={handleAccessibilityChange}
+            disabled={isLoading}
+          />
+        </Form.Group>
+
+        <Button variant="primary" size="lg" type="submit" disabled={isLoading}>
           Search
-        </button>
-      </form>
+        </Button>
+      </Form>
     </>
   );
 }

@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { Form, Button } from "react-bootstrap";
+import { Capitalize } from "../Helpers/Capitalize";
 
 export default function TypeForm({ handleTypeChange, type, setData }) {
   const [isLoading, setLoading] = useState(false);
@@ -12,7 +14,7 @@ export default function TypeForm({ handleTypeChange, type, setData }) {
       const getData = async () => {
         try {
           const response = await fetch(
-            `http://www.boredapi.com/api/activity?type=${type}`
+            `http://www.boredapi.com/api/activity?type=${type.toLowerCase()}`
           );
           if (!response.ok) {
             throw new Error(
@@ -21,7 +23,6 @@ export default function TypeForm({ handleTypeChange, type, setData }) {
           }
           let actualData = await response.json();
           setData(actualData);
-          console.log(actualData);
           setError(null);
         } catch (error) {
           setError(error.message);
@@ -50,24 +51,28 @@ export default function TypeForm({ handleTypeChange, type, setData }) {
     <>
       <h2>Get a suggestion based on activity's type:</h2>
 
-      <form onSubmit={handleSubmit}>
-        <label>Choose activity type:</label>
-        <select
-          className="input"
-          name="type"
-          onChange={handleTypeChange}
-          disabled={isLoading}
-        >
-          <option>Choose an option</option>
-          {categories.map((category) => (
-            <option key={category}>{category}</option>
-          ))}
-        </select>
+      <Form onSubmit={handleSubmit} className="mt-4 d-grid form-mb">
+        <Form.Group className="mb-3" controlId="formGroupActivityType">
+          <Form.Label>Select type of activity</Form.Label>
+          <Form.Select
+            onChange={handleTypeChange}
+            disabled={isLoading}
+            aria-label="Activity type select"
+            defaultValue="default"
+          >
+            <option value="default" disabled>
+              Choose an option
+            </option>
+            {categories.map((category) => (
+              <option key={category}>{Capitalize(category)}</option>
+            ))}
+          </Form.Select>
+        </Form.Group>
 
-        <button className="btn-submit" type="submit" disabled={isLoading}>
+        <Button variant="primary" size="lg" type="submit" disabled={isLoading}>
           Search
-        </button>
-      </form>
+        </Button>
+      </Form>
     </>
   );
 }

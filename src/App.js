@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Tabs, Tab } from "react-bootstrap";
+import React, { useState, useEffect } from "react";
+import { Tab, Nav } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import PriceForm from "./components/Price";
@@ -40,39 +40,95 @@ function App() {
     setParticipants(event.target.value);
   };
 
+  const [width, setWidth] = useState(window.innerWidth);
+  useEffect(() => {
+    const handleResize = () => {
+      setWidth(window.innerWidth);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   return (
     <>
-      <h1>Im' bored :(</h1>
-      <Tabs defaultActiveKey="price" id="tab-activities" className="mb-3">
-        <Tab eventKey="price" title="Price">
-          <PriceForm
-            handlePriceChange={handlePriceChange}
-            price={price}
-            setData={setData}
-          />
-        </Tab>
-        <Tab eventKey="accessibility" title="Accessibility">
-          <AccessibilityForm
-            handleAccessibilityChange={handleAccessibilityChange}
-            accessibility={accessibility}
-            setData={setData}
-          />
-        </Tab>
-        <Tab eventKey="activity-type" title="Activity type">
-          <TypeForm
-            handleTypeChange={handleTypeChange}
-            type={type}
-            setData={setData}
-          />
-        </Tab>
-        <Tab eventKey="number-of-participants" title="Number of participants">
-          <ParticipantsForm
-            handleParticipantsChange={handleParticipantsChange}
-            participants={participants}
-            setData={setData}
-          />
-        </Tab>
-      </Tabs>
+      <h1>Im' bored, give me something</h1>
+
+      <Tab.Container id="categories-tabs" defaultActiveKey="price">
+        {width >= 580 ? (
+          <Nav variant="tabs" className="mb-3" fill>
+            <Nav.Item>
+              <Nav.Link eventKey="price">Price</Nav.Link>
+            </Nav.Item>
+
+            <Nav.Item>
+              <Nav.Link eventKey="accessibility">Accessibility</Nav.Link>
+            </Nav.Item>
+
+            <Nav.Item>
+              <Nav.Link eventKey="activity-type">Activity Type</Nav.Link>
+            </Nav.Item>
+
+            <Nav.Item>
+              <Nav.Link eventKey="number-of-participants">
+                Number of Participants
+              </Nav.Link>
+            </Nav.Item>
+          </Nav>
+        ) : (
+          <Nav variant="pills" className="flex-column mb-3">
+            <Nav.Item>
+              <Nav.Link eventKey="price">Price</Nav.Link>
+            </Nav.Item>
+            <Nav.Item>
+              <Nav.Link eventKey="accessibility">Accessibility</Nav.Link>
+            </Nav.Item>
+            <Nav.Item>
+              <Nav.Link eventKey="activity-type">Activity Type</Nav.Link>
+            </Nav.Item>
+            <Nav.Item>
+              <Nav.Link eventKey="number-of-participants">
+                Number of Participants
+              </Nav.Link>
+            </Nav.Item>
+          </Nav>
+        )}
+
+        <Tab.Content>
+          <Tab.Pane eventKey="price">
+            <PriceForm
+              handlePriceChange={handlePriceChange}
+              price={price}
+              setData={setData}
+            />
+          </Tab.Pane>
+          <Tab.Pane eventKey="accessibility">
+            <AccessibilityForm
+              handleAccessibilityChange={handleAccessibilityChange}
+              accessibility={accessibility}
+              setData={setData}
+            />
+          </Tab.Pane>
+          <Tab.Pane eventKey="activity-type">
+            <TypeForm
+              handleTypeChange={handleTypeChange}
+              type={type}
+              setData={setData}
+            />
+          </Tab.Pane>
+          <Tab.Pane eventKey="number-of-participants">
+            <ParticipantsForm
+              handleParticipantsChange={handleParticipantsChange}
+              participants={participants}
+              setData={setData}
+            />
+          </Tab.Pane>
+        </Tab.Content>
+      </Tab.Container>
+
       {data && <Main data={data} />}
     </>
   );

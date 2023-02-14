@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Form, Button } from "react-bootstrap";
 
 export default function PriceForm({ handlePriceChange, price, setData }) {
   const [isLoading, setLoading] = useState(false);
@@ -7,6 +8,7 @@ export default function PriceForm({ handlePriceChange, price, setData }) {
   const handleSubmit = (event) => {
     event.preventDefault();
 
+    //need to let the user know this is a  requirement (validation?)
     if (price.minprice <= price.maxprice) {
       setLoading(true);
       const getData = async () => {
@@ -21,7 +23,6 @@ export default function PriceForm({ handlePriceChange, price, setData }) {
           }
           let actualData = await response.json();
           setData(actualData);
-          console.log(actualData);
           setError(null);
         } catch (error) {
           setError(error.message);
@@ -38,33 +39,38 @@ export default function PriceForm({ handlePriceChange, price, setData }) {
     <>
       <h2>Get a suggestion based on activity's price:</h2>
 
-      <form onSubmit={handleSubmit}>
-        <label>Your budget (min and max values):</label>
-        <input
-          className="input"
-          name="minprice"
-          type="range"
-          min={0}
-          max={1}
-          step={0.01}
-          defaultValue={0}
-          onChange={handlePriceChange}
-          disabled={isLoading}
-        />
-        <input
-          className="input"
-          name="maxprice"
-          type="range"
-          min={0}
-          max={1}
-          step={0.01}
-          onChange={handlePriceChange}
-          disabled={isLoading}
-        />
-        <button className="btn-submit" type="submit" disabled={isLoading}>
+      <Form onSubmit={handleSubmit} className="mt-4 d-grid form-mb">
+        <Form.Group className="mb-3" controlId="formGroupMinPrice">
+          <Form.Label>Minimal value for price</Form.Label>
+          <Form.Control
+            type="range"
+            name="minprice"
+            min={0}
+            max={1}
+            step={0.01}
+            defaultValue={0}
+            onChange={handlePriceChange}
+            disabled={isLoading}
+          />
+        </Form.Group>
+        <Form.Group className="mb-3" controlId="formGroupMaxPrice">
+          <Form.Label>Maximal value for price</Form.Label>
+          <Form.Control
+            type="range"
+            name="maxprice"
+            min={0}
+            max={1}
+            step={0.01}
+            defaultValue={1}
+            onChange={handlePriceChange}
+            disabled={isLoading}
+          />
+        </Form.Group>
+
+        <Button variant="primary" size="lg" type="submit" disabled={isLoading}>
           Search
-        </button>
-      </form>
+        </Button>
+      </Form>
     </>
   );
 }
